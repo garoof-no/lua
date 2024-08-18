@@ -29,12 +29,20 @@
   </head>
   <body>
     <div>
-      <textarea id="editor">-- web.require for loading modules from URLs
+      <textarea id="editor">
+local function fallback(a, b) return a + b end
+      
+-- web.require for loading modules from URLs
 -- first argument of web.require is the name of the module, second is the (possibly relative) URL
-local gcd = web.require("gcd", "./gcd.lua")
+-- we pcall it in case web.require doesn't work (e.g. if page is opened directly from filesystem)
+local status, gcd = pcall(function() return web.require("gcd", "./gcd.lua") end)
+
+gcd = status and gcd or { gcd = fallback }
 
 -- lcd.lua contains `require("gcd")`. it works since the the previous web.require named that module "gcd"
-local lcd = web.require("lcd", "https://lua54-wasm.glitch.me/lcd.lua")
+local status, lcd = pcall(function() return web.require("lcd", "./lcd.lua") end)
+
+lcd = status and lcd or { lcd = fallback }
 
 -- blah blah. some example code:
 local function td(content)
