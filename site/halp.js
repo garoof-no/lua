@@ -104,7 +104,7 @@
             web.co = coroutine.running()
             send("require", path)
             local res = coroutine.yield()
-            package.loaded[name] = res
+            package.loaded[name] = res()
            return res
         end,
       run = function(thunk)
@@ -116,10 +116,7 @@
       resume = function(thunk)
           local prev = web.co
           web.co = nil
-          local co = coroutine.create(thunk)
-          local status, res = coroutine.resume(co)
-          assert(status, res)
-          local prevStatus, prevRes = coroutine.resume(prev, res);
+          local prevStatus, prevRes = coroutine.resume(prev, thunk);
           assert(status, res)
           return prevRes
       end
