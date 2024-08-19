@@ -27,7 +27,6 @@ jobs:
         run: |
           sudo apt-get install -y emscripten
           make all
-          mv main.js ./site/lua-wasm.js
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

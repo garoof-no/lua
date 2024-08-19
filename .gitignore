@@ -1,6 +1,5 @@
 **/*.o
 **/*.a
 *.wasm
-main.js
-/site/lua-wasm.js
+lua-wasm.js
 
