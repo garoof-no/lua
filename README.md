@@ -13,7 +13,7 @@ The my-needs-stuff:
 
 This repo is built and deployed to GitHub Pages, so there's [an example you can try here](https://glorp.github.io/webby-lua).
 
-If you don't want to build the wasm stuff yourself, you can remix or download stuff through the Glitch stuff. Or you can download the individual files directly: The Emscripten-built file:
+If you don't want to build the wasm stuff yourself, you can just download the built stuff. The Emscripten-built file:
 * [lua-wasm.js](https://glorp.github.io/webby-lua/lua-wasm.js)
 
 Others used in the example:
