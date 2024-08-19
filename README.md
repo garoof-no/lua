@@ -20,7 +20,7 @@ Others used in the example:
 * [index.html](https://glorp.github.io/webby-lua/index.html) is the HTML
 * [halp.js](https://glorp.github.io/webby-lua/halp.js) has JS for sending to Lua and receiving from Lua
 * [lz-string-1.4.4.js](https://glorp.github.io/webby-lua/lz-string-1.4.4.js) is used for compressing code for putting it in URL query. Not needed unless you wanna do exactly that :)
-* [gcd.lua](https://glorp.github.io/webby-lua/gcd.lua) and [lcd.lua](https://glorp.github.io/webby-lua/gcd.lua) are example Lua libraries that you probably don't want
+* [gcd.lua](https://glorp.github.io/webby-lua/gcd.lua) and [lcd.lua](https://glorp.github.io/webby-lua/lcd.lua) are example Lua libraries that you probably don't want
 
 # String literal or .wasm
 
