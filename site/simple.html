@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Lua :)</title>
+    <script src="./lua-wasm.js" defer></script>
+    <script>
+      window.onload = () => {
+        const editor = document.getElementById("editor");
+        const run = document.getElementById("run");
+        const result = document.getElementById("result");
+        result.replaceChildren();
+        const print = (...args) => {
+          const text = args.join(" ");
+          if (text != "emsc") {
+            result.append(text + "\n");
+          }
+        }
+        const config = {
+          print: print,
+          printErr: print,
+          send: (code, payload) => {
+            if (code === "return") {
+              if (payload === "") {
+                return;
+              }
+              print("return: " + payload);
+            } else {
+              console.error(`unkown code sent from Lua. code: "%o". payload: %o`, code, payload);
+            }
+          }
+        };
+        initWasmModule(config).then((module) => {
+          module.ccall("run_lua", "number", ["string"], [`
+            local send = webSend
+            webSend = nil
+            web = {}
+            local Web = {}
+            setmetatable(web, Web)
+            function Web:__index(code)
+              return function(payload) send(code, payload) end
+            end
+          `]);
+          run.onclick = () => module.ccall("run_lua", "number", ["string"], [editor.value]);
+        });
+      };
+    </script>
+  </head>
+  <body>
+      <textarea id="editor">print("hello")
+return "world"</textarea>
+    <button id="run">Run</button>
+    <pre><code id="result">No JavaScript? Maybe see <a href="https://github.com/Glorp/webby-lua">the repo on GitHub</a>.</code></pre>
+  </body>
+</html>
