@@ -17,7 +17,7 @@ If you don't want to build the wasm stuff yourself, you can just download the bu
 
 * [lua-wasm.js](https://glorp.github.io/webby-lua/lua-wasm.js) is the Emscripten-built file
 * [simple.html](https://glorp.github.io/webby-lua/simple.html) is a simple example that only depends on lua-wasm.js
-* [index.html](https://glorp.github.io/webby-lua/index.html) is the HTML of the larger example that also uses the files below
+* [index.html](https://glorp.github.io/webby-lua/index.html) is the larger example that also uses the files below
 * [halp.js](https://glorp.github.io/webby-lua/halp.js) has JS for sending to Lua and receiving from Lua
 * [lz-string-1.4.4.js](https://glorp.github.io/webby-lua/lz-string-1.4.4.js) is used for compressing code for putting it in URL query. Not needed unless you wanna do exactly that :)
 * [gcd.lua](https://glorp.github.io/webby-lua/gcd.lua) and [lcd.lua](https://glorp.github.io/webby-lua/lcd.lua) are example Lua libraries that you probably don't want
