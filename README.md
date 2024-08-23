@@ -1,17 +1,17 @@
 # Webby Lua
 
-[Lua](https://www.lua.org/) VM in browser.
+There's [an example you can try here](https://glorp.github.io/webby-lua). (Repo is set up so it builds the stuff and deploys to GitHub Pages.)
 
-A for-my-needs variant of [this wasm_lua](https://github.com/Dreagonmon/wasm_lua).
-
-The my-needs-stuff:
+Anyway: A [Lua](https://www.lua.org/) VM in browser. It's based on [this wasm_lua](https://github.com/Dreagonmon/wasm_lua), but I've changed a few things:
 
 * The Lua VM is started once and never stopped, so you can use it more REPL-like/interactively
-* There's one function for sending some Lua code from JS to the Lua, and one function for sending two string ("code" and "payload") from Lua to the JS. (The JS chooses how to interpret code/payload. Can use it for things like sending code "log" to have the JS console.log the payload...)
+* There's one function for sending a chunk of Lua code from JS to the Lua, and one function for sending two string (`code` and `payload`) from Lua to the JS. (The JS chooses how to interpret code/payload, so you can decide that e.g. sending the code `"log"` should make the JS `console.log` the payload...)
+* Builds a somewhat large .js files instead of a .wasm and a .js file
+* It only does Lua 5.4, since that's what I'm using
+* Like, different example HTML and stuff
+* Don't know
 
-# Example
-
-This repo is built and deployed to GitHub Pages, so there's [an example you can try here](https://glorp.github.io/webby-lua).
+# Files and stuf
 
 If you don't want to build the wasm stuff yourself, you can just download the built stuff: You can [grab a zip file with everything here](https://glorp.github.io/webby-lua/webby-lua.zip). Or grab individual files:
 
