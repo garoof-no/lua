@@ -27,14 +27,13 @@ jobs:
         run: |
           sudo apt-get install -y emscripten zip
           make all
-          cd site
-          zip -r webby-lua.zip .
+          zip -r webby-lua-site/webby-lua.zip webby-lua-site
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './site/'
+          path: './webby-lua-site/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
