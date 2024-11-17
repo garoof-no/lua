@@ -30,50 +30,13 @@
   <body>
     <div>
       <textarea id="editor">
-local function fallback(a, b) return a + b end
-      
--- web.require for loading modules from URLs
--- first argument of web.require is the name of the module, second is the (possibly relative) URL
--- we pcall it in case web.require doesn't work (e.g. if page is opened directly from filesystem)
-local status, gcd = pcall(function() return web.require("gcd", "./gcd.lua") end)
+web.html([[<p><a href="https://github.com/garoof-no/lua">sourc</a></p]])
 
-gcd = status and gcd or { gcd = fallback }
-
--- lcd.lua contains `require("gcd")`. it works since the the previous web.require named that module "gcd"
-local status, lcd = pcall(function() return web.require("lcd", "./lcd.lua") end)
-
-lcd = status and lcd or { lcd = fallback }
-
--- blah blah. some example code:
-local function td(content)
-  return "&lt;td&gt;" .. content .. "&lt;/td&gt;"
-end
-        
-local function row(a, b)
-  return "&lt;tr&gt;" .. td(a) .. td(b) .. td(gcd.gcd(a, b)) .. td(lcd.lcd(a, b)) .. "&lt;/tr&gt;"
+local function foo(a, b)
+  return string.rep(b, a)
 end
 
-local html = {
-  [[&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://www.lua.org/"&gt;&lt;img src="./lua-logo.gif" alt="Lua"&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://github.com/Glorp/webby-lua"&gt;in the browser&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;]],
-  "&lt;table&gt;&lt;thead&gt;",
-  "&lt;table&gt;&lt;thead&gt;",
-  "&lt;tr&gt;&lt;th&gt;a&lt;/th&gt;&lt;th&gt;b&lt;/th&gt;&lt;th&gt;gcd(a, b)&lt;/th&gt;&lt;th&gt;lcd(a, b)&lt;/th&gt;&lt;/tr&gt;",
-  "&lt;/thead&gt;&lt;tbody&gt;"
-}
-
-local i = 0
-while i &lt; 10 do
-  i = i + 1
-  table.insert(html, row(math.random(2, 20), math.random(2, 20)))
-end
-        
-table.insert(html, "&lt;/tbody&gt;&lt;/table&gt;")
-        
-web.html(table.concat(html))
-</textarea>
+return foo(10, "hello") .. " world"
       <div class="right">
         <div>
           <label for="autorun" id="autolabel">autorun:</label>
@@ -85,7 +48,7 @@ web.html(table.concat(html))
     </div>
     <div id="result">
       <p>
-        No JavaScript? Maybe see <a href="https://github.com/Glorp/webby-lua">the repo on GitHub</a>.
+        No JavaScript? Maybe see <a href="https://github.com/garoof-no/lua">the repo on GitHub</a>.
       </p>
     </div>
   </body>
