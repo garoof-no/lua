@@ -13,13 +13,29 @@
     const forlink = document.getElementById("forlink");
     const url = window.location.href.split('?')[0];
     let link = null;
+    
+    let module;
+    const runLua = () => {
+      result.replaceChildren(elem("pre", { className: "output" }));
+      const str = editor.value;
+      module.ccall("run_lua", "number", ["string"], [luarun(str)]);
+      link = elem("a", { href: `${url}?code=${LZString144.compressToEncodedURIComponent(str)}` }, "link");
+      forlink.replaceChildren(link);
+    };
 
     let timer;
+    let dirty = true;
+    const modified = (countdown) => {
+      dirty = true;
+      clearTimeout(timer);
+      if (autorun.checked) {
+        timer = setTimeout(runLua, countdown);
+      }
+    };
 
     const luarun = str => `return web.run(function() ${str} end)`;
     const luaresume = str => `return web.resume(function() ${str} end)`;
     const luastr = str => `[[${str.replace("]]", "__")}]]`;
-    let modified = true;
     
     const printelem = () => elem("pre", { className: "output" });
     
@@ -36,7 +52,6 @@
     };
 
 
-    let module;
     const config = {
       print: print,
       printErr: print,
@@ -69,6 +84,23 @@
           };
           xmlHttp.open("GET", payload, true);
           xmlHttp.send(null);
+        } else if (code == "file") {
+          const named = payload !== ""
+          const label = named ? `${payload}: ` : "Load file: ";
+          const input = elem("input", { type: "file" });
+          input.onchange = () => {
+            for (const file of input.files) {
+              const reader = new FileReader();
+              reader.onloadend = () => {
+                module.FS.writeFile(named ? payload : file.name, new Uint8Array(reader.result));
+                modified(0);
+              }
+              reader.readAsArrayBuffer(file);
+            }
+          };
+          
+          html(elem("div", {}, label, input));
+
         } else {
           console.error(`unkown code sent from Lua. code: "%o". payload: %o`, code, payload);
         }
@@ -121,14 +153,6 @@
 
     initWasmModule(config).then((m) => {
       module = m;
-
-      const runLua = () => {
-        result.replaceChildren(elem("pre", { className: "output" }));
-        const str = editor.value;
-        module.ccall("run_lua", "number", ["string"], [luarun(str)]);
-        link = elem("a", { href: `${url}?code=${LZString144.compressToEncodedURIComponent(str)}` }, "link");
-        forlink.replaceChildren(link);
-      };
     
       module.ccall("run_lua", "number", ["string"], [prelude]);
       runLua();
@@ -137,16 +161,12 @@
           link.remove();
           link = null;
         }
-        modified = true;
-        clearTimeout(timer);
-        if (autorun.checked) {
-          timer = setTimeout(runLua, 500);
-        }
+        modified(500);
       };
       autorun.onchange = () => {
         if (!autorun.checked) {
           clearTimeout(timer);
-        } else if (modified) {
+        } else if (dirty) {
           runLua();
         }
       };
