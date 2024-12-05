@@ -100,9 +100,7 @@
               reader.readAsArrayBuffer(file);
             }
           };
-          
           html(elem("div", {}, label, input));
-
         } else {
           console.error(`unkown code sent from Lua. code: "%o". payload: %o`, code, payload);
         }
