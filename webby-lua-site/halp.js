@@ -69,12 +69,13 @@
         } else if (code === "log") {
           console.log(payload);
         } else if (code === "require") {
+          const [_, url, file] = payload.match(/([^\s]+)\s+(.+)/);
           const xmlHttp = new XMLHttpRequest();
           xmlHttp.onreadystatechange = () => {
             if (xmlHttp.readyState === 4) {
-              let code;
+              let code = "";
               if (xmlHttp.status === 200) {
-                code = xmlHttp.responseText;
+                module.FS.writeFile(file, new Uint8Array(xmlHttp.response));
               } else {
                 const err = `${xmlHttp.status}: ${xmlHttp.statusText} (${payload})`;
                 code = `error(${luastr(err)})`;
@@ -82,7 +83,8 @@
               module.ccall("run_lua", "number", ["string"], [luaresume(code)]);
             }
           };
-          xmlHttp.open("GET", payload, true);
+          xmlHttp.responseType = "arraybuffer";
+          xmlHttp.open("GET", url, true);
           xmlHttp.send(null);
         } else if (code == "file") {
           const named = payload !== ""
@@ -120,15 +122,15 @@
     webSend = nil
     web = {
       send = send,
-      require = function(name, path)
+      require = function(name, path, filename)
         local loaded = package.loaded[name]
         if loaded then return loaded end
+        filename = filename or (name .. ".lua")
         web.co = coroutine.running()
-        send("require", path)
+        send("require", path .. " " .. filename)
         local thunk = coroutine.yield()
-        local res = thunk()
-        package.loaded[name] = res
-        return res
+        thunk()
+        return require(name)
       end,
       run = function(thunk)
         coroutine.wrap(
