@@ -1,5 +1,7 @@
 **/*.o
 **/*.a
+**/lua
+**/luac
 *.wasm
 lua-wasm.js
 *.zip
