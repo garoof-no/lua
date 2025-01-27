@@ -11,7 +11,7 @@ EM_JS(void, web_send, (const char* code, const char* payload), {
 static int lua_web_send(lua_State* L) {
     size_t len = 0;
     const char *code = lua_tolstring(L, 1, &len);
-	const char *payload = lua_tolstring(L, 2, &len);
+		const char *payload = lua_tolstring(L, 2, &len);
     web_send(code, payload);
     return 0;
 }
@@ -30,7 +30,7 @@ int run_lua(const char* script) {
 
 	size_t len = 0;
 	const char* value = lua_tolstring(lua, lua_gettop(lua), &len);
-	web_send("return", value);
+	web_send(res ? "error" : "return", value);
 
 	return 0;
 }

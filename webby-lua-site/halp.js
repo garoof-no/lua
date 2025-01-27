@@ -56,9 +56,9 @@
       print: print,
       printErr: print,
       send: (code, payload) => {
-        if (code === "return") {
+        if (code === "return" || code === "error") {
           if (payload !== "") {
-            print("return: " + payload);
+            print(`${code}: ${payload}`);
           }
         } else if (code === "html") {
           const div = elem("div");
