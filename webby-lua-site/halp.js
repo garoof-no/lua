@@ -18,7 +18,7 @@
     const runLua = () => {
       result.replaceChildren(elem("pre", { className: "output" }));
       const str = editor.value;
-      module.ccall("run_lua", "number", ["string"], [luarun(str)]);
+      module.ccall("run_lua", "number", ["string", "string"], [luarun, str]);
       link = elem("a", { href: `${url}?code=${LZString144.compressToEncodedURIComponent(str)}` }, "link");
       forlink.replaceChildren(link);
     };
@@ -33,8 +33,9 @@
       }
     };
 
-    const luarun = str => `return web.run(function() ${str} end)`;
-    const luaresume = str => `return web.resume(function() ${str} end)`;
+    const luaplain = `return function(f) return f() end`;
+    const luarun = `return web.run`;
+    const luaresume = `return web.resume`;
     const luastr = str => `[[${str.replace("]]", "__")}]]`;
     
     const printelem = () => elem("pre", { className: "output" });
@@ -80,7 +81,7 @@
                 const err = `${xmlHttp.status}: ${xmlHttp.statusText} (${payload})`;
                 code = `error(${luastr(err)})`;
               }
-              module.ccall("run_lua", "number", ["string"], [luaresume(code)]);
+              module.ccall("run_lua", "number", ["string", "string"], [luaresume, code]);
             }
           };
           xmlHttp.responseType = "arraybuffer";
@@ -154,7 +155,7 @@
     initWasmModule(config).then((m) => {
       module = m;
     
-      module.ccall("run_lua", "number", ["string"], [prelude]);
+      module.ccall("run_lua", "number", ["string", "string"], [luaplain, prelude]);
       runLua();
       editor.oninput = () => {
         if (link !== null) {
